@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Chatbot - Flune Online Multiservices Platform</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Basic Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #1a1a1a;
+            color: #fff;
+            line-height: 1.6;
+            padding-top: 60px;
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 1rem;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+        }
+
+        nav .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        nav h1 {
+            font-size: 1.75rem;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+        }
+
+        nav ul li {
+            margin-left: 1.5rem;
+        }
+
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 1rem;
+            transition: color 0.3s ease;
+        }
+
+        nav ul li a:hover {
+            color: #ffd700;
+        }
+
+        .hero {
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('chatbot-background.jpg') no-repeat center center/cover;
+            color: #fff;
+            text-align: center;
+            padding: 6rem 1rem;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        .hero h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            margin-bottom: 2rem;
+            font-weight: 300;
+        }
+
+        .chatbot-content {
+            padding: 4rem 1rem;
+            background-color: #2b2b2b;
+            text-align: center;
+        }
+
+        .chatbot-content h3 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+            color: #ffd700;
+        }
+
+        .chatbot-content p {
+            font-size: 1rem;
+            color: #ccc;
+            margin-bottom: 2rem;
+        }
+
+        .chatbot-interface {
+            border: 1px solid #444;
+            border-radius: 8px;
+            padding: 2rem;
+            background: #1e1e1e;
+            max-width: 600px;
+            margin: 0 auto;
+            position: relative;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+        }
+
+        .chat-log {
+            height: 200px;
+            overflow-y: auto;
+            margin-bottom: 1rem;
+            padding: 1rem;
+            background-color: #2e2e2e;
+            border-radius: 4px;
+        }
+
+        .chat-log p {
+            margin: 0.5rem 0;
+        }
+
+        textarea {
+            width: 100%;
+            height: 80px;
+            padding: 1rem;
+            border: 1px solid #444;
+            border-radius: 4px;
+            font-family: 'Fira Code', monospace;
+            font-size: 1rem;
+            line-height: 1.5;
+            background: #2e2e2e;
+            color: #fff;
+            resize: vertical;
+        }
+
+        .chatbot-button {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            margin-top: 1rem;
+            border: none;
+            border-radius: 4px;
+            background-color: #ff6f61;
+            color: #fff;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s ease;
+        }
+
+        .chatbot-button:hover {
+            background-color: #ff3b2d;
+        }
+
+        .options-container,
+        .ai-options-container {
+            display: none;
+            margin-top: 1rem;
+            padding: 1rem;
+            background: #444;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+        }
+
+        .options-container a,
+        .ai-options-container a {
+            display: block;
+            padding: 0.75rem;
+            color: #fff;
+            text-decoration: none;
+            margin-bottom: 0.5rem;
+            background-color: #555;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+            text-align: center;
+        }
+
+        .options-container a:hover,
+        .ai-options-container a:hover {
+            background-color: #666;
+        }
+
+        footer {
+            background: #333;
+            color: #fff;
+            text-align: center;
+            padding: 1rem 0;
+            margin-top: 4rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+
+        .social-icons {
+            margin-top: 1rem;
+        }
+
+        .social-icons a {
+            color: #fff;
+            margin: 0 0.5rem;
+            font-size: 1.2rem;
+            transition: color 0.3s ease;
+        }
+
+        .social-icons a:hover {
+            color: #ffd700;
+        }
+
+        @media (max-width: 768px) {
+            .hero h2 {
+                font-size: 2rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            .chatbot-interface {
+                padding: 1rem;
+            }
+
+            textarea {
+                height: 60px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <nav>
+            <div class="container">
+                <h1>Flune Online Multiservices Platform</h1>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="services.html">Services</a></li>
+                    <li><a href="#">About</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <h2>AI Chatbot</h2>
+            <p>Engage with our advanced AI chatbot for a variety of tasks and queries. Experience seamless and intelligent conversations.</p>
+        </div>
+    </section>
+
+    <section class="chatbot-content">
+        <div class="container">
+            <h3>Chat with Flune</h3>
+            <p>Type your message below to start interacting with Flune. It’s designed to assist you with a wide range of services.</p>
+            <div class="chatbot-interface">
+                <div id="chat-log" class="chat-log"></div>
+                <textarea id="chatbot-input" class="chatbot-input" placeholder="Type your message here..."></textarea>
+                <button id="chatbot-button" class="chatbot-button">Send</button>
+                <div id="options-container" class="options-container">
+                    <a href="#" id="quiz-option">Play Quiz</a>
+                    <a href="#" id="ai-option">Interact with AI</a>
+                    <a href="#" id="future-option">Future Messages</a>
+                    <a href="#" id="typing-test-option">Typing Test</a>
+                    <a href="#" id="calculator-option">Calculator</a>
+                    <a href="#" id="decoder-option">Decoder</a> <!-- Added Decoder Option -->
+                </div>
+                <div id="ai-options-container" class="ai-options-container">
+                    <a href="https://chat.openai.com" class="ai-option-link">ChatGPT</a>
+                    <a href="https://www.bing.com/chat" class="ai-option-link">Bing</a>
+                    <a href="https://gemini.google.com" class="ai-option-link">Gemini AI</a>
+                    <a href="https://chat.olakrutrim.com/home" class="ai-option-link">Krutrim AI</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 Flune Online Multiservices Platform. All rights reserved.</p>
+            <div class="social-icons">
+                <a href="#" target="_blank" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" target="_blank" class="social-icon"><i class="fab fa-twitter"></i></a>
+                <a href="#" target="_blank" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
+                <a href="#" target="_blank" class="social-icon"><i class="fab fa-instagram"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('chatbot-button').addEventListener('click', function () {
+            let userInput = document.getElementById('chatbot-input').value.toLowerCase();
+            let chatLog = document.getElementById('chat-log');
+            let optionsContainer = document.getElementById('options-container');
+            let aiOptionsContainer = document.getElementById('ai-options-container');
+
+            chatLog.innerHTML += `<p><strong>You:</strong> ${userInput}</p>`;
+
+            // Clear input
+            document.getElementById('chatbot-input').value = '';
+
+            if (userInput === 'hi') {
+                chatLog.innerHTML += `<p><strong>Flune:</strong> Hello! How can I assist you today? Type 'play quiz', 'interact with AI', 'future messages', 'typing test', 'calculator', or 'decoder' to get started.</p>`;
+                optionsContainer.style.display = 'block';
+                aiOptionsContainer.style.display = 'none';
+            } else if (userInput === 'play quiz') {
+                window.location.href = 'quiz.html';
+            } else if (userInput === 'interact with ai') {
+                optionsContainer.style.display = 'none';
+                aiOptionsContainer.style.display = 'block';
+            } else if (userInput === 'future messages') {
+                window.location.href = 'hi.html';
+            } else if (userInput === 'typing test') {
+                window.location.href = 'typing.html';
+            } else if (userInput === 'calculator') {
+                window.location.href = 'calculator.html';
+            } else if (userInput === 'decoder') {
+                window.location.href = 'decoder.html';  // Added Decoder Functionality
+            } else {
+                chatLog.innerHTML += `<p><strong>Flune:</strong> I'm sorry, I didn't understand that. Please type 'hi' to start or choose an option from the list.</p>`;
+            }
+        });
+
+        // Handle clicks on AI options
+        document.getElementById('ai-options-container').addEventListener('click', function (event) {
+            if (event.target.classList.contains('ai-option-link')) {
+                event.preventDefault();
+                window.open(event.target.href, '_blank');
+            }
+        });
+    </script>
+</body>
+
+</html>

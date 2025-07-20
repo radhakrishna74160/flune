@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code Editor - AI Powered Bot</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #1a1a1a; /* Dark background for contrast */
+            padding-top: 60px; /* Space for fixed header */
+        }
+
+        header {
+            background: #333;
+            color: #fff;
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+        }
+
+        nav .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        nav h1 {
+            font-size: 1.75rem;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+        }
+
+        nav ul li {
+            margin-left: 1.5rem;
+        }
+
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 1rem;
+            transition: color 0.3s ease;
+        }
+
+        nav ul li a:hover {
+            color: #ffd700;
+        }
+
+        .hero {
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('code-editor-background.jpg') no-repeat center center/cover;
+            color: #fff;
+            text-align: center;
+            padding: 6rem 1rem;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.3);
+            z-index: 1;
+        }
+
+        .hero h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            z-index: 2;
+            position: relative;
+            animation: fadeInDown 1s ease-out;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            margin-bottom: 2rem;
+            font-weight: 300;
+            z-index: 2;
+            position: relative;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero .cta-button {
+            padding: 1rem 2rem;
+            background: #ff6f61;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            z-index: 2;
+            position: relative;
+        }
+
+        .hero .cta-button:hover {
+            background: #ff3b2d;
+        }
+
+        .editor-content {
+            padding: 4rem 1rem;
+            background-color: #2b2b2b; /* Darker background for contrast */
+            text-align: center;
+        }
+
+        .editor-content h3 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+            color: #ffd700;
+        }
+
+        .editor-content p {
+            font-size: 1rem;
+            color: #ccc;
+            margin-bottom: 2rem;
+        }
+
+        .code-editor {
+            border: 1px solid #444;
+            border-radius: 8px;
+            padding: 1rem;
+            background: #1e1e1e;
+            max-width: 800px;
+            margin: 0 auto;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+        }
+
+        textarea {
+            width: 100%;
+            height: 300px;
+            padding: 1rem;
+            border: 1px solid #444;
+            border-radius: 4px;
+            font-family: 'Fira Code', monospace;
+            font-size: 1rem;
+            line-height: 1.5;
+            background: #2e2e2e;
+            color: #fff;
+            resize: vertical; /* Allows vertical resizing */
+        }
+
+        .editor-button, .clear-button, .save-button {
+            margin-top: 1rem;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .editor-button {
+            background: #ff6f61;
+            color: #fff;
+        }
+
+        .editor-button:hover {
+            background: #ff3b2d;
+        }
+
+        .clear-button {
+            background: #28a745;
+            color: #fff;
+        }
+
+        .clear-button:hover {
+            background: #218838;
+        }
+
+        .save-button {
+            background: #007bff;
+            color: #fff;
+        }
+
+        .save-button:hover {
+            background: #0056b3;
+        }
+
+        footer {
+            background: #333;
+            color: #fff;
+            text-align: center;
+            padding: 1rem 0;
+            margin-top: 4rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+
+        .social-icons {
+            margin-top: 1rem;
+        }
+
+        .social-icons a {
+            color: #fff;
+            margin: 0 0.5rem;
+            font-size: 1.2rem;
+            transition: color 0.3s ease;
+        }
+
+        .social-icons a:hover {
+            color: #ffd700;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .hero h2 {
+                font-size: 2rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            .code-editor {
+                padding: 0.5rem;
+            }
+
+            textarea {
+                height: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="container">
+                <h1>AI Powered Bot</h1>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="services.html">Services</a></li>
+                    <li><a href="#">About</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <h2>Code Editor</h2>
+            <p>Write, test, and debug your code with our powerful online code editor. Support for multiple programming languages available.</p>
+        </div>
+    </section>
+
+    <section class="editor-content">
+        <div class="container">
+            <h3>Online Code Editor</h3>
+            <p>Use the editor below to write and test your code. Choose your preferred programming language and start coding!</p>
+            <div class="code-editor">
+                <label for="language-select">Select Programming Language:</label>
+                <select id="language-select">
+                    <optgroup label="Web Development">
+                        <option value="javascript">JavaScript (.js)</option>
+                        <option value="html">HTML (.html)</option>
+                        <option value="css">CSS (.css)</option>
+                    </optgroup>
+                    <optgroup label="Backend Development">
+                        <option value="python">Python (.py)</option>
+                        <option value="java">Java (.java)</option>
+                        <option value="csharp">C# (.cs)</option>
+                        <option value="php">PHP (.php)</option>
+                    </optgroup>
+                    <optgroup label="Data Science">
+                        <option value="r">R (.R)</option>
+                        <option value="matlab">MATLAB (.m)</option>
+                    </optgroup>
+                    <optgroup label="Other Languages">
+                        <option value="ruby">Ruby (.rb)</option>
+                        <option value="go">Go (.go)</option>
+                    </optgroup>
+                </select>
+                <textarea id="code" placeholder="Write your code here..."></textarea>
+                s
+                <button class="clear-button" onclick="clearCode()">Clear</button>
+                <button class="save-button" onclick="saveCode()">Save</button>
+                <div id="output" style="margin-top: 1rem; border: 1px solid #444; padding: 1rem; background: #2e2e2e; color: #fff;"></div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 AI Powered Bot. All rights reserved.</p>
+            <div class="social-icons">
+                <a href="#"><i class="fab fa-facebook"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script>
+
+        function clearCode() {
+            document.getElementById('code').value = '';
+            document.getElementById('output').innerHTML = '';
+        }
+
+        function saveCode() {
+            const code = document.getElementById('code').value;
+            const selectedLanguage = document.getElementById('language-select').value;
+            let extension;
+
+            // Determine the file extension based on the selected language
+            switch (selectedLanguage) {
+                case 'javascript':
+                    extension = '.js';
+                    break;
+                case 'html':
+                    extension = '.html';
+                    break;
+                case 'css':
+                    extension = '.css';
+                    break;
+                case 'python':
+                    extension = '.py';
+                    break;
+                case 'java':
+                    extension = '.java';
+                    break;
+                case 'csharp':
+                    extension = '.cs';
+                    break;
+                case 'r':
+                    extension = '.R';
+                    break;
+                case 'matlab':
+                    extension = '.m';
+                    break;
+                case 'ruby':
+                    extension = '.rb';
+                    break;
+                case 'go':
+                    extension = '.go';
+                    break;
+                case 'php':
+                    extension = '.php';
+                    break;
+                default:
+                    extension = '';
+            }
+
+            // Create a Blob and generate a download link
+            const blob = new Blob([code], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'code' + extension; // Default filename
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url); // Cleanup
+        }
+    </script>
+</body>
+</html>

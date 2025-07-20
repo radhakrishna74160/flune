@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Future Messages</title>
+    <style>
+        /* Your existing CSS */
+        body, h1, p {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f2f5;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            width: 100%;
+        }
+
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+        label {
+            display: block;
+            margin: 15px 0 5px;
+            font-size: 14px;
+            font-weight: bold;
+            color: #34495e;
+        }
+
+        input[type="text"], input[type="date"], input[type="email"], textarea {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 2px solid #bdc3c7;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus, input[type="date"]:focus, input[type="email"]:focus, textarea:focus {
+            border-color: #2980b9;
+            outline: none;
+        }
+
+        textarea {
+            resize: none;
+            height: 100px;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            background-color: #2980b9;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #1f6393;
+        }
+
+        .message-list {
+            margin-top: 30px;
+        }
+
+        .message-item {
+            background-color: #ecf0f1;
+            padding: 15px;
+            border: 1px solid #bdc3c7;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            position: relative;
+        }
+
+        .message-item::before {
+            content: "🕒";
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 24px;
+            color: #2980b9;
+        }
+
+        .message-item strong {
+            display: block;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .history-button {
+            margin-top: 20px;
+            width: 100%;
+            background-color: #3498db;
+            color: white;
+        }
+
+        .history-section {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .history-item {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            position: relative;
+        }
+
+        .history-item button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #e74c3c;
+            border: none;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .history-item button:hover {
+            background-color: #c0392b;
+        }
+
+        .clear-all {
+            background-color: #e67e22;
+        }
+
+        .clear-all:hover {
+            background-color: #d35400;
+        }
+    </style>
+    <!-- Include EmailJS SDK -->
+    <script type="text/javascript" src="https://cdn.emailjs.com/dist/email.min.js"></script>
+    <script type="text/javascript">
+        (function(){
+            emailjs.init("YOUR_USER_ID"); // Replace with your EmailJS user ID
+        })();
+    </script>
+</head>
+<body>
+
+<div class="container">
+    <h1>Create Future Message</h1>
+    <label for="email">Recipient's Gmail:</label>
+    <input type="email" id="email" placeholder="Enter recipient's Gmail">
+
+    <label for="message">Your Message:</label>
+    <textarea id="message" placeholder="Write your message here..."></textarea>
+
+    <label for="date">Delivery Date:</label>
+    <input type="date" id="date">
+
+    <button onclick="scheduleMessage()">Schedule Message</button>
+    <button class="history-button" onclick="toggleHistory()">View History</button>
+
+    <div class="history-section" id="historySection">
+        <h2>Message History</h2>
+        <div class="message-list" id="historyList"></div>
+        <button class="clear-all" onclick="clearAllMessages()">Clear All Messages</button>
+    </div>
+
+    <div class="message-list" id="messageList"></div>
+</div>
+
+<script>
+    let messages = [];
+
+    function scheduleMessage() {
+        const email = document.getElementById('email').value;
+        const message = document.getElementById('message').value;
+        const date = document.getElementById('date').value;
+
+        if (!email || !message || !date) {
+            alert('Please fill in all fields.');
+            return;
+        }
+
+        // Send the email using EmailJS
+        emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', {
+            to_email: email,
+            subject: 'Scheduled Message',
+            message: message,
+            delivery_date: date
+        }).then(function(response) {
+            alert('Email scheduled successfully!');
+        }, function(error) {
+            alert('Failed to schedule email: ' + error.text);
+        });
+
+        // Store the message in memory
+        messages.push({ email, message, date });
+
+        // Add message to the list
+               const messageItem = document.createElement('div');
+        messageItem.classList.add('message-item');
+        messageItem.innerHTML = `<strong>Email:</strong> ${email}<br><strong>Message:</strong> ${message}<br><strong>Delivery Date:</strong> ${date}`;
+        document.getElementById('messageList').appendChild(messageItem);
+
+        // Clear the form
+        document.getElementById('email').value = '';
+        document.getElementById('message').value = '';
+        document.getElementById('date').value = '';
+    }
+
+    function toggleHistory() {
+        const historySection = document.getElementById('historySection');
+        const isVisible = historySection.style.display === 'block';
+        historySection.style.display = isVisible ? 'none' : 'block';
+        if (!isVisible) {
+            loadHistory();
+        }
+    }
+
+    function loadHistory() {
+        const historyList = document.getElementById('historyList');
+        historyList.innerHTML = '';
+        messages.forEach((msg, index) => {
+            const historyItem = document.createElement('div');
+            historyItem.classList.add('history-item');
+            historyItem.innerHTML = `
+                <strong>Email:</strong> ${msg.email}<br>
+                <strong>Message:</strong> ${msg.message}<br>
+                <strong>Delivery Date:</strong> ${msg.date}
+                <button onclick="deleteMessage(${index})">Delete</button>
+            `;
+            historyList.appendChild(historyItem);
+        });
+    }
+
+    function deleteMessage(index) {
+        messages.splice(index, 1);
+        loadHistory();
+    }
+
+    function clearAllMessages() {
+        messages = [];
+        loadHistory();
+    }
+
+    // Load stored messages on page load
+    window.onload = function() {
+        const messageList = document.getElementById('messageList');
+        messages.forEach(msg => {
+            const messageItem = document.createElement('div');
+            messageItem.classList.add('message-item');
+            messageItem.innerHTML = `<strong>Email:</strong> ${msg.email}<br><strong>Message:</strong> ${msg.message}<br><strong>Delivery Date:</strong> ${msg.date}`;
+            messageList.appendChild(messageItem);
+        });
+    };
+</script>
+
+</body>
+</html>
+

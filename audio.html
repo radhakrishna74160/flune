@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audio File Management</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        form {
+            margin-bottom: 20px;
+        }
+
+        input[type="file"] {
+            margin-right: 10px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            margin: 10px 0;
+        }
+
+        audio {
+            display: block;
+            margin: 10px auto;
+        }
+    </style>
+</head>
+<body>
+    <h1 id="pageTitle">Upload and Save Your Audio Files</h1>
+    <div id="uploadSection">
+        <form id="uploadForm">
+            <input type="file" id="audioFile" accept="audio/*" required>
+            <button type="submit">Upload</button>
+        </form>
+        <button id="saveToServerButton">Save All to Server</button>
+    </div>
+    <div id="viewSection" style="display:none;">
+        <h1>Saved Audio Files</h1>
+        <ul id="audioList">
+            <!-- Audio files will be dynamically added here -->
+        </ul>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const uploadForm = document.getElementById('uploadForm');
+            const audioList = document.getElementById('audioList');
+            const uploadSection = document.getElementById('uploadSection');
+            const viewSection = document.getElementById('viewSection');
+            const saveToServerButton = document.getElementById('saveToServerButton');
+
+            // Display the upload or view section based on URL
+            if (window.location.search.includes('view=true')) {
+                uploadSection.style.display = 'none';
+                viewSection.style.display = 'block';
+
+                // Load saved audio files
+                for (let i = 0; i < localStorage.length; i++) {
+                    const fileName = localStorage.key(i);
+                    const audioData = localStorage.getItem(fileName);
+                    const listItem = document.createElement('li');
+                    const audio = document.createElement('audio');
+                    audio.controls = true;
+                    audio.src = audioData;
+                    listItem.textContent = fileName;
+                    listItem.appendChild(audio);
+                    audioList.appendChild(listItem);
+                }
+
+                // Save all local storage files to the server
+                saveToServerButton.addEventListener('click', () => {
+                    const files = [];
+                    for (let i = 0; i < localStorage.length; i++) {
+                        const fileName = localStorage.key(i);
+                        const fileData = localStorage.getItem(fileName);
+                        files.push({ name: fileName, data: fileData });
+                    }
+                    
+                    fetch('/api/save-audio-files', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ files })
+                    })
+                    .then(response => response.json())
+                    .then(result => {
+                        if (result.success) {
+                            alert('Files saved to server successfully');
+                        } else {
+                            alert('Error saving files to server');
+                        }
+                    })
+                    .catch(error => {
+                        alert('Error uploading files');
+                    });
+                });
+            } else {
+                uploadForm.addEventListener('submit', (event) => {
+                    event.preventDefault();
+                    const fileInput = document.getElementById('audioFile');
+                    const file = fileInput.files[0];
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = (e) => {
+                            const audioData = e.target.result;
+                            // Store the audio data in local storage
+                            localStorage.setItem(file.name, audioData);
+                            alert('File uploaded successfully');
+                            window.location.search = 'view=true';
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

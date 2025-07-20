@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Categorized Quiz</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+
+        #category-container, #quiz-container, #result-container {
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeIn 0.6s ease-in-out forwards;
+        }
+
+        #quiz-container, #result-container {
+            display: none;
+        }
+
+        h2 {
+            font-size: 26px;
+            margin-bottom: 20px;
+            color: #444;
+        }
+
+        #question-text {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: #666;
+        }
+
+        .category-btn, .option-btn {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: white;
+            border: none;
+            padding: 15px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            margin: 10px 0;
+            width: 100%;
+            font-size: 16px;
+            transition: transform 0.2s, box-shadow 0.2s, background-color 0.2s;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        #next-btn {
+            background: linear-gradient(135deg, #28a745 0%, #218838 100%);
+            color: white;
+            font-size: 16px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            border: none;
+            padding: 15px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            width: 100%;
+            margin: 10px 0;
+            transition: transform 0.2s, box-shadow 0.2s, background-color 0.2s;
+        }
+
+        .category-btn:hover, .option-btn:hover, #next-btn:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .option-btn.selected {
+            background: linear-gradient(135deg, #ff512f 0%, #dd2476 100%);
+            transform: scale(1.1);
+        }
+
+        #result-text {
+            font-size: 20px;
+            color: #444;
+        }
+
+        button:focus {
+            outline: none;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes buttonPulse {
+            0%, 100% {
+                transform: scale(1);
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            }
+            50% {
+                transform: scale(1.1);
+                box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
+            }
+        }
+
+        #next-btn:hover {
+            animation: buttonPulse 1.5s infinite;
+        }
+
+        .credits {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #777;
+        }
+
+        .credits a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .credits a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div id="category-container">
+        <h2>Select Quiz Category</h2>
+        <button class="category-btn" onclick="startQuiz('technology')">Technology Quiz</button>
+        <button class="category-btn" onclick="startQuiz('science')">Science Quiz</button>
+        <button class="category-btn" onclick="startQuiz('nature')">Nature Quiz</button>
+        <button class="category-btn" onclick="startQuiz('gk')">General Knowledge Quiz</button>
+        <button class="category-btn" onclick="startQuiz('biology')">Biology Quiz</button>
+    </div>
+
+    <div id="quiz-container">
+        <h2 id="quiz-title">Quiz</h2>
+        <div id="quiz-content">
+            <p id="question-text"></p>
+            <div id="options-container"></div>
+        </div>
+        <button id="next-btn" onclick="nextQuestion()">Next</button>
+    </div>
+
+    <div id="result-container">
+        <h2>Your Result</h2>
+        <p id="result-text"></p>
+        <button onclick="restartQuiz()">Restart Quiz</button>
+    </div>
+
+    <script>
+        const questionBank = {
+            technology: [
+                { question: "What is the time complexity of binary search in a sorted array?", options: ["O(n)", "O(log n)", "O(1)", "O(n^2)"], answer: "O(log n)" },
+                { question: "Which protocol is used for secure communication over the internet?", options: ["HTTP", "HTTPS", "FTP", "SMTP"], answer: "HTTPS" },
+                { question: "What does the acronym 'JSON' stand for?", options: ["JavaScript Online Nodes", "JavaScript Object Notation", "Java Object Notation", "JavaScript On Network"], answer: "JavaScript Object Notation" },
+                { question: "What is the maximum value of a signed 8-bit integer?", options: ["127", "128", "255", "256"], answer: "127" },
+                { question: "Which layer of the OSI model is responsible for routing?", options: ["Data Link Layer", "Transport Layer", "Network Layer", "Application Layer"], answer: "Network Layer" },
+                { question: "Which algorithm is used to find the shortest path in a graph?", options: ["Dijkstra's Algorithm", "Bubble Sort", "Quick Sort", "Binary Search"], answer: "Dijkstra's Algorithm" },
+                { question: "What is the default port for HTTPS?", options: ["80", "21", "443", "53"], answer: "443" },
+                { question: "What is the output of 'typeof null' in JavaScript?", options: ["object", "null", "undefined", "string"], answer: "object" },
+                { question: "Which data structure is used in the LRU cache implementation?", options: ["Stack", "Queue", "Hash Map + Doubly Linked List", "Binary Tree"], answer: "Hash Map + Doubly Linked List" },
+                { question: "What does ACID stand for in database management?", options: ["Atomicity, Consistency, Isolation, Durability", "Availability, Consistency, Isolation, Dependency", "Access, Control, Integrity, Durability", "Atomicity, Control, Integrity, Dependency"], answer: "Atomicity, Consistency, Isolation, Durability" }
+            ],
+            science: [
+                { question: "What is the chemical formula for ozone?", options: ["O2", "O3", "H2O2", "CO2"], answer: "O3" },
+                { question: "Who is known as the 'father of modern physics'?", options: ["Albert Einstein", "Isaac Newton", "Niels Bohr", "Galileo Galilei"], answer: "Galileo Galilei" },
+                { question: "What is the unit of electric resistance?", options: ["Ampere", "Volt", "Ohm", "Watt"], answer: "Ohm" },
+                { question: "What particle is exchanged in the strong nuclear force?", options: ["Photon", "Boson", "Gluon", "Neutrino"], answer: "Gluon" },
+                { question: "What is the acceleration due to gravity on the Moon?", options: ["1.62 m/s²", "9.8 m/s²", "0 m/s²", "3.7 m/s²"], answer: "1.62 m/s²" },
+                { question: "What is the pH level of pure water?", options: ["0", "7", "14", "10"], answer: "7" },
+                { question: "Which gas is most abundant in the Earth's atmosphere?", options: ["Oxygen", "Carbon Dioxide", "Nitrogen", "Hydrogen"], answer: "Nitrogen" },
+                { question: "What is the primary source of energy for the Earth?", options: ["The Moon", "The Sun", "Nuclear Power", "Geothermal Energy"], answer: "The Sun" },
+                { question: "What is the speed of light in a vacuum?", options: ["300,000 km/s", "150,000 km/s", "1,000 km/s", "300 km/s"], answer: "300,000 km/s" },
+                { question: "What is the main component of the Earth's core?", options: ["Iron", "Nickel", "Lead", "Copper"], answer: "Iron" }
+            ],
+            nature: [
+                { question: "What is the largest mammal in the world?", options: ["Elephant", "Blue Whale", "Giraffe", "Great White Shark"], answer: "Blue Whale" },
+                { question: "Which planet is known as the Red Planet?", options: ["Earth", "Mars", "Jupiter", "Saturn"], answer: "Mars" },
+                { question: "What is the process by which plants make their food?", options: ["Photosynthesis", "Respiration", "Transpiration", "Fermentation"], answer: "Photosynthesis" },
+                { question: "Which layer of the atmosphere do we live in?", options: ["Stratosphere", "Troposphere", "Mesosphere", "Thermosphere"], answer: "Troposphere" },
+                { question: "What is the tallest mountain in the world?", options: ["K2", "Kangchenjunga", "Mount Everest", "Lhotse"], answer: "Mount Everest" },
+                { question: "Which animal is known for its ability to change color?", options: ["Chameleon", "Octopus", "Squid", "Cuttlefish"], answer: "Chameleon" },
+                { question: "What is the main ingredient in guacamole?", options: ["Tomato", "Pepper", "Avocado", "Onion"], answer: "Avocado" },
+                { question: "Which is the largest ocean on Earth?", options: ["Atlantic Ocean", "Indian Ocean", "Arctic Ocean", "Pacific Ocean"], answer: "Pacific Ocean" },
+                { question: "What is the only continent that is also a country?", options: ["Africa", "Antarctica", "Australia", "Asia"], answer: "Australia" },
+                { question: "What is the process of water vapor turning into liquid water called?", options: ["Condensation", "Evaporation", "Precipitation", "Sublimation"], answer: "Condensation" }
+            ],
+            gk: [
+                { question: "Who wrote 'The Odyssey'?", options: ["Homer", "Virgil", "Sophocles", "Plato"], answer: "Homer" },
+                { question: "Which country hosted the 2016 Summer Olympics?", options: ["China", "Brazil", "Greece", "USA"], answer: "Brazil" },
+                { question: "What is the capital of Japan?", options: ["Seoul", "Beijing", "Tokyo", "Bangkok"], answer: "Tokyo" },
+                { question: "Which planet is known as the 'Morning Star'?", options: ["Venus", "Mars", "Mercury", "Jupiter"], answer: "Venus" },
+                { question: "What is the hardest natural substance on Earth?", options: ["Diamond", "Gold", "Iron", "Graphite"], answer: "Diamond" },
+                { question: "In which year did World War II end?", options: ["1944", "1945", "1946", "1947"], answer: "1945" },
+                { question: "What is the largest desert in the world?", options: ["Sahara", "Arabian", "Gobi", "Antarctic"], answer: "Antarctic" },
+                { question: "Who is known as the 'Mahatma'?", options: ["Jawaharlal Nehru", "Subhas Chandra Bose", "Mahatma Gandhi", "Sardar Patel"], answer: "Mahatma Gandhi" },
+                { question: "What is the smallest country in the world?", options: ["Vatican City", "Monaco", "San Marino", "Liechtenstein"], answer: "Vatican City" },
+                { question: "Who painted the Mona Lisa?", options: ["Van Gogh", "Picasso", "Da Vinci", "Rembrandt"], answer: "Da Vinci" }
+            ],
+            biology: [
+                { question: "What is the basic unit of life?", options: ["Tissue", "Cell", "Organ", "Organism"], answer: "Cell" },
+                { question: "Which organ is responsible for pumping blood in the human body?", options: ["Liver", "Heart", "Lungs", "Kidneys"], answer: "Heart" },
+                { question: "What is the process by which plants lose water called?", options: ["Photosynthesis", "Transpiration", "Respiration", "Germination"], answer: "Transpiration" },
+                { question: "Which part of the cell contains the genetic material?", options: ["Cytoplasm", "Nucleus", "Cell Membrane", "Mitochondria"], answer: "Nucleus" },
+                { question: "What is the primary function of red blood cells?", options: ["Transport oxygen", "Fight infections", "Clot blood", "Transport nutrients"], answer: "Transport oxygen" },
+                { question: "Which vitamin is produced when a person is exposed to sunlight?", options: ["Vitamin A", "Vitamin B12", "Vitamin C", "Vitamin D"], answer: "Vitamin D" },
+                { question: "What is the largest organ in the human body?", options: ["Heart", "Liver", "Skin", "Lungs"], answer: "Skin" },
+                { question: "What is the main function of the ribosomes?", options: ["Energy production", "Protein synthesis", "Genetic information storage", "Cell division"], answer: "Protein synthesis" },
+                { question: "Which process do bacteria use to reproduce?", options: ["Mitosis", "Binary Fission", "Meiosis", "Budding"], answer: "Binary Fission" },
+                { question: "What type of bond holds the two strands of DNA together?", options: ["Ionic bond", "Covalent bond", "Hydrogen bond", "Metallic bond"], answer: "Hydrogen bond" }
+            ]
+        };
+
+        let currentCategory;
+        let currentQuestionIndex;
+        let score;
+
+        function startQuiz(category) {
+            currentCategory = category;
+            currentQuestionIndex = 0;
+            score = 0;
+
+            document.getElementById('category-container').style.display = 'none';
+            document.getElementById('quiz-container').style.display = 'block';
+
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            const questionData = questionBank[currentCategory][currentQuestionIndex];
+            document.getElementById('question-text').innerText = questionData.question;
+
+            const optionsContainer = document.getElementById('options-container');
+            optionsContainer.innerHTML = '';
+
+            questionData.options.forEach(option => {
+                const button = document.createElement('button');
+                button.innerText = option;
+                button.classList.add('option-btn');
+                button.onclick = () => selectOption(option);
+                optionsContainer.appendChild(button);
+            });
+        }
+
+        function selectOption(selectedOption) {
+            const questionData = questionBank[currentCategory][currentQuestionIndex];
+            if (selectedOption === questionData.answer) {
+                score++;
+            }
+
+            const options = document.querySelectorAll('.option-btn');
+            options.forEach(option => {
+                option.disabled = true; // Disable all options after selection
+                if (option.innerText === questionData.answer) {
+                    option.style.backgroundColor = '#28a745'; // Green for correct answer
+                } else if (option.innerText === selectedOption) {
+                    option.style.backgroundColor = '#dc3545'; // Red for incorrect answer
+                }
+            });
+
+            // Show the next button after selecting an option
+            document.getElementById('next-btn').style.display = 'block';
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < questionBank[currentCategory].length) {
+                loadQuestion();
+                document.getElementById('next-btn').style.display = 'none'; // Hide next button until option is selected
+            } else {
+                showResult();
+            }
+        }
+
+        function showResult() {
+            document.getElementById('quiz-container').style.display = 'none';
+            document.getElementById('result-container').style.display = 'block';
+            const totalQuestions = questionBank[currentCategory].length;
+            document.getElementById('result-text').innerText = `You scored ${score} out of ${totalQuestions}`;
+        }
+
+        function restartQuiz() {
+            document.getElementById('result-container').style.display = 'none';
+            document.getElementById('category-container').style.display = 'block';
+        }
+    </script>
+</body>
+</html>

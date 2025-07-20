@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Resume Generator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Open+Sans:wght@400;600&family=Lora:wght@400;700&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        header {
+            background-color: #283593;
+            color: white;
+            text-align: center;
+            padding: 2rem 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+        }
+
+        main {
+            padding: 2rem;
+            max-width: 800px;
+            margin: auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            color: #283593;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid #283593;
+            padding-bottom: 0.5rem;
+            font-size: 1.75rem;
+        }
+
+        label {
+            margin-top: 1rem;
+            display: block;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        textarea,
+        input[type="file"],
+        select {
+            width: 100%;
+            padding: 1rem;
+            margin: 0.5rem 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="tel"]:focus,
+        textarea:focus {
+            border-color: #283593;
+            outline: none;
+        }
+
+        button {
+            padding: 1rem;
+            background-color: #283593;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-top: 1rem;
+            width: 100%;
+            font-size: 1rem;
+        }
+
+        button:hover {
+            background-color: #1e1e80;
+        }
+
+        #resume-output {
+            display: none;
+            padding: 2rem;
+            margin-top: 1rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        .resume-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .resume-header img {
+            border-radius: 50%;
+            width: 120px;
+            height: 120px;
+            margin-right: 20px;
+            border: 3px solid #283593;
+        }
+
+        .resume-header h3 {
+            margin: 0;
+            color: #283593;
+            font-size: 2rem;
+        }
+
+        .resume-header p {
+            margin: 0;
+            font-size: 0.9rem;
+            color: #555;
+        }
+
+        .section-title {
+            color: #283593;
+            margin-top: 1.5rem;
+            margin-bottom: 0.5rem;
+            border-bottom: 1px solid #283593;
+            padding-bottom: 0.2rem;
+            font-size: 1.5rem;
+        }
+
+        .resume-details {
+            margin-bottom: 1.5rem;
+        }
+
+        footer {
+            text-align: center;
+            padding: 1rem;
+            background-color: #283593;
+            color: white;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+            margin-top: 2rem;
+        }
+
+        /* Resume Designs */
+        .design-1 {
+            font-family: 'Open Sans', sans-serif;
+            background-color: #e3f2fd;
+            color: #0d47a1;
+        }
+
+        .design-2 {
+            font-family: 'Lora', serif;
+            background-color: #fce4ec;
+            color: #880e4f;
+        }
+
+        .design-3 {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #ffe0b2;
+            color: #e65100;
+        }
+
+        .design-4 {
+            font-family: 'Roboto', sans-serif;
+            background-color: #c8e6c9;
+            color: #1b5e20;
+        }
+
+        .design-5 {
+            font-family: 'Open Sans', sans-serif;
+            background-color: #fff3e0;
+            color: #e65100;
+        }
+
+        .design-6 {
+            font-family: 'Lora', serif;
+            background-color: #e0f7fa;
+            color: #00796b;
+        }
+
+        .design-7 {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #f1f8e9;
+            color: #33691e;
+        }
+
+        .design-8 {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f5f5f5;
+            color: #424242;
+        }
+
+        .design-9 {
+            font-family: 'Open Sans', sans-serif;
+            background-color: #e1bee7;
+            color: #6a1b9a;
+        }
+
+        .design-10 {
+            font-family: 'Lora', serif;
+            background-color: #fffde7;
+            color: #f57f17;
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+<body>
+    <header>
+        <h1>Modern Resume Generator</h1>
+    </header>
+    
+    <main>
+        <section id="resume-form">
+            <h2>Fill in Your Details</h2>
+            <form id="form">
+                <label for="photo">Profile Photo:</label>
+                <input type="file" id="photo" accept="image/*" required>
+
+                <label for="name">Name:</label>
+                <input type="text" id="name" required>
+
+                <label for="email">Email:</label>
+                <input type="email" id="email" required>
+
+                <label for="phone">Phone:</label>
+                <input type="tel" id="phone" required>
+
+                <label for="linkedin">LinkedIn Profile:</label>
+                <input type="text" id="linkedin" placeholder="Your LinkedIn URL">
+
+                <label for="profile">Profile Summary:</label>
+                <textarea id="profile" rows="3" placeholder="A brief summary about yourself" required></textarea>
+
+                <label for="education">Education:</label>
+                <input type="text" id="education" required placeholder="Your highest education">
+
+                <label for="experience">Experience:</label>
+                <textarea id="experience" rows="4" required placeholder="Your work experience"></textarea>
+
+                <label for="skills">Skills:</label>
+                <input type="text" id="skills" required placeholder="Your skills, separated by commas">
+
+                <label for="certifications">Certifications:</label>
+                <input type="text" id="certifications" placeholder="Your certifications, separated by commas">
+
+                <label for="hobbies">Hobbies:</label>
+                <input type="text" id="hobbies" placeholder="Your hobbies, separated by commas">
+
+                <label for="design">Select Resume Design:</label>
+                <select id="design" required>
+                    <option value="design-1">Design 1</option>
+                    <option value="design-2">Design 2</option>
+                    <option value="design-3">Design 3</option>
+                    <option value="design-4">Design 4</option>
+                    <option value="design-5">Design 5</option>
+                    <option value="design-6">Design 6</option>
+                    <option value="design-7">Design 7</option>
+                    <option value="design-8">Design 8</option>
+                    <option value="design-9">Design 9</option>
+                    <option value="design-10">Design 10</option>
+                </select>
+
+                <button type="submit">Generate Resume</button>
+                <button id="downloadButton" style="display: none;">Download Resume</button>
+            </form>
+        </section>
+
+        <section id="resume-output">
+            <h2>Your Resume</h2>
+            <div class="resume-header">
+                <img id="output-photo" src="#" alt="Profile Photo" />
+                <div>
+                    <h3 id="output-name"></h3>
+                    <p id="output-email"></p>
+                    <p id="output-phone"></p>
+                    <p id="output-linkedin"></p>
+                </div>
+            </div>
+            <div class="resume-details">
+                <h3 class="section-title">Profile Summary</h3>
+                <p id="output-profile"></p>
+                <h3 class="section-title">Education</h3>
+                <p id="output-education"></p>
+                <h3 class="section-title">Experience</h3>
+                <p id="output-experience"></p>
+                <h3 class="section-title">Skills</h3>
+                <p id="output-skills"></p>
+                <h3 class="section-title">Certifications</h3>
+                <p id="output-certifications"></p>
+                <h3 class="section-title">Hobbies</h3>
+                <p id="output-hobbies"></p>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>Resume Generator © 2024</p>
+    </footer>
+
+    <script>
+        document.getElementById('form').addEventListener('submit', function (event) {
+            event.preventDefault();
+            generateResume();
+        });
+
+        document.getElementById('downloadButton').addEventListener('click', function () {
+            const resumeOutput = document.getElementById('resume-output');
+            html2canvas(resumeOutput).then(function (canvas) {
+                const link = document.createElement('a');
+                link.href = canvas.toDataURL('image/png');
+                link.download = 'resume.png';
+                link.click();
+            });
+        });
+
+        function generateResume() {
+            // Get form values
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
+            const linkedin = document.getElementById('linkedin').value;
+            const profile = document.getElementById('profile').value;
+            const education = document.getElementById('education').value;
+            const experience = document.getElementById('experience').value;
+            const skills = document.getElementById('skills').value.split(',').map(skill => skill.trim()).join(', ');
+            const certifications = document.getElementById('certifications').value.split(',').map(cert => cert.trim()).join(', ');
+            const hobbies = document.getElementById('hobbies').value.split(',').map(hobby => hobby.trim()).join(', ');
+            const design = document.getElementById('design').value;
+
+            // Set output values
+            document.getElementById('output-name').textContent = name;
+            document.getElementById('output-email').textContent = email;
+            document.getElementById('output-phone').textContent = phone;
+            document.getElementById('output-linkedin').textContent = linkedin;
+            document.getElementById('output-profile').textContent = profile;
+            document.getElementById('output-education').textContent = education;
+            document.getElementById('output-experience').textContent = experience;
+            document.getElementById('output-skills').textContent = skills;
+            document.getElementById('output-certifications').textContent = certifications;
+            document.getElementById('output-hobbies').textContent = hobbies;
+
+            // Set photo
+            const photoInput = document.getElementById('photo');
+            const file = photoInput.files[0];
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                document.getElementById('output-photo').src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+
+            // Show resume output and download button
+            document.getElementById('resume-output').style.display = 'block';
+            document.getElementById('downloadButton').style.display = 'block';
+            document.getElementById('resume-output').className = design; // Apply selected design
+        }
+    </script>
+</body>
+</html>

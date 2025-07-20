@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Encoder and Decoder</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f4f8;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background-color: #ffffff;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            padding: 40px;
+            width: 600px;
+            max-width: 100%;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: #0066cc;
+        }
+
+        .input-area {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .input-group {
+            flex: 1;
+            margin: 0 10px;
+        }
+
+        textarea {
+            width: 100%;
+            height: 150px;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 16px;
+            resize: none;
+            transition: border-color 0.3s ease;
+        }
+
+        textarea:focus {
+            border-color: #0066cc;
+            outline: none;
+        }
+
+        button {
+            background-color: #0066cc;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #004999;
+        }
+
+        button:active {
+            background-color: #003366;
+        }
+
+        .buttons {
+            margin-top: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .input-area {
+                flex-direction: column;
+            }
+
+            .input-group {
+                margin-bottom: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>English to Binary Encoder/Decoder</h1>
+
+        <div class="input-area">
+            <div class="input-group">
+                <h3>English to Binary</h3>
+                <textarea id="englishText" placeholder="Enter English text..."></textarea>
+            </div>
+
+            <div class="input-group">
+                <h3>Binary to English</h3>
+                <textarea id="binaryText" placeholder="Enter Binary code..."></textarea>
+            </div>
+        </div>
+
+        <div class="buttons">
+            <button onclick="encodeToBinary()">Encode to Binary</button>
+            <button onclick="decodeToEnglish()">Decode to English</button>
+        </div>
+    </div>
+
+    <script>
+        // Function to encode English text to binary
+        function encodeToBinary() {
+            let text = document.getElementById('englishText').value;
+            let binary = text.split('').map(function(char) {
+                return char.charCodeAt(0).toString(2).padStart(8, '0');
+            }).join(' ');
+            document.getElementById('binaryText').value = binary;
+        }
+
+        // Function to decode binary back to English
+        function decodeToEnglish() {
+            let binary = document.getElementById('binaryText').value;
+            let text = binary.split(' ').map(function(bin) {
+                return String.fromCharCode(parseInt(bin, 2));
+            }).join('');
+            document.getElementById('englishText').value = text;
+        }
+    </script>
+
+</body>
+</html>

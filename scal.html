@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scientific Calculator</title>
+    <link rel="stylesheet" href="scalc.css">
+</head>
+<body>
+    <div class="calculator">
+        <div class="display">
+            <input type="text" id="display" readonly>
+        </div>
+        <div class="main-content">
+            <div class="buttons">
+                <!-- Rows of buttons -->
+                <button class="memory" onclick="clearDisplay()">C</button>
+                <button class="memory" onclick="memoryStore()">MS</button>
+                <button class="memory" onclick="memoryRecall()">MR</button>
+                <button class="memory" onclick="memoryClear()">MC</button>
+                <button class="memory" onclick="memoryAdd()">M+</button>
+                <button class="memory" onclick="memorySubtract()">M-</button>
+                <button class="operator" onclick="appendToDisplay('(')">(</button>
+                <button class="operator" onclick="appendToDisplay(')')">)</button>
+                <button class="operator" onclick="appendToDisplay('/')">/</button>
+                <button class="operator" onclick="appendToDisplay('*')">*</button>
+                <button class="operator" onclick="appendToDisplay('-')">-</button>
+                <button class="operator" onclick="appendToDisplay('+')">+</button>
+                <button onclick="appendToDisplay('7')">7</button>
+                <button onclick="appendToDisplay('8')">8</button>
+                <button onclick="appendToDisplay('9')">9</button>
+                <button class="operator" onclick="calculateResult()">=</button>
+                <button onclick="appendToDisplay('4')">4</button>
+                <button onclick="appendToDisplay('5')">5</button>
+                <button onclick="appendToDisplay('6')">6</button>
+                <button class="operator" onclick="appendToDisplay('Math.sqrt(')">√</button>
+                <button onclick="appendToDisplay('1')">1</button>
+                <button onclick="appendToDisplay('2')">2</button>
+                <button onclick="appendToDisplay('3')">3</button>
+                <button class="operator" onclick="appendToDisplay('Math.sin(')">sin</button>
+                <button onclick="appendToDisplay('0')">0</button>
+                <button onclick="appendToDisplay('.')">.</button>
+                <button class="operator" onclick="appendToDisplay('Math.cos(')">cos</button>
+                <button class="operator" onclick="appendToDisplay('Math.tan(')">tan</button>
+                <button class="operator" onclick="appendToDisplay('Math.log(')">log</button>
+                <button class="operator" onclick="appendToDisplay('Math.asin(')">asin</button>
+                <button class="operator" onclick="appendToDisplay('Math.acos(')">acos</button>
+                <button class="operator" onclick="appendToDisplay('Math.atan(')">atan</button>
+                <button class="operator" onclick="appendToDisplay('Math.sinh(')">sinh</button>
+                <button class="operator" onclick="appendToDisplay('Math.cosh(')">cosh</button>
+                <button class="operator" onclick="appendToDisplay('Math.tanh(')">tanh</button>
+                <button class="operator" onclick="appendToDisplay('Math.PI')">π</button>
+                <button class="operator" onclick="appendToDisplay('Math.E')">e</button>
+                <button class="operator" onclick="appendToDisplay('%')">%</button>
+                <button class="operator" onclick="appendToDisplay('|')">|x|</button>
+                <button class="operator" onclick="appendToDisplay('!')">n!</button>
+                <button class="operator" onclick="appendToDisplay('Math.pow(')">x^y</button>
+                <button class="operator" onclick="appendToDisplay('Math.log10(')">log10</button>
+                <button class="operator" onclick="appendToDisplay('Math.exp(')">exp</button>
+            </div>
+            <div class="color-picker">
+                <label for="colorSelect">Button Color:</label>
+                <select id="colorSelect" onchange="changeButtonColor(event)">
+                    <option value="#f9f9f9">Default</option>
+                    <option value="#ff6f61">Coral</option>
+                    <option value="#6a1b9a">Purple</option>
+                    <option value="#0288d1">Blue</option>
+                    <option value="#43a047">Green</option>
+                    <option value="#fbc02d">Yellow</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <script src="scalcu.js"></script>
+</body>
+</html>

@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flune - Health Chatbot</title>
+    <style>
+/* Import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background: linear-gradient(135deg, rgba(0, 0, 0, 0.9), rgba(30, 30, 30, 1)), 
+                url('https://source.unsplash.com/1600x900/?night,galaxy') no-repeat center center fixed;
+    background-size: cover;
+    color: #f8f9fa;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+    animation: pulse 10s infinite alternate;
+}
+
+@keyframes pulse {
+    0% { opacity: 0.8; }
+    100% { opacity: 1; }
+}
+
+.chat-container {
+    max-width: 500px;
+    width: 100%;
+    background: rgba(25, 25, 25, 0.85);
+    border-radius: 25px;
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.7);
+    padding: 40px;
+    animation: fadeIn 0.6s ease-in-out;
+    backdrop-filter: blur(15px);
+    position: relative;
+    overflow: hidden;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+#chat-box {
+    height: 400px;
+    overflow-y: auto;
+    margin-bottom: 20px;
+    border: none;
+    border-radius: 20px;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.1);
+    animation: fadeIn 0.4s ease-in-out;
+    position: relative;
+}
+
+/* Animate messages */
+.message {
+    margin: 10px 0;
+    padding: 15px 20px;
+    border-radius: 20px;
+    max-width: 70%;
+    position: relative;
+    box-shadow: 0 6px 20px rgba(255, 255, 255, 0.1);
+    transition: transform 0.3s, opacity 0.3s;
+    opacity: 0;
+    animation: slideIn 0.6s forwards;
+}
+
+@keyframes slideIn {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+.user-message {
+    background: linear-gradient(135deg, #007bff, #0056b3);
+    color: white;
+    margin-left: auto;
+    text-align: right;
+    box-shadow: 0 4px 15px rgba(0, 123, 255, 0.5);
+}
+
+.bot-message {
+    background: linear-gradient(135deg, #28a745, #218838);
+    color: white;
+    margin-right: auto;
+    text-align: left;
+    box-shadow: 0 4px 15px rgba(40, 167, 69, 0.5);
+}
+
+.options {
+    margin: 10px 0;
+}
+
+.option-btn {
+    display: inline-block;
+    margin: 5px;
+    padding: 12px 20px;
+    background: linear-gradient(135deg, #0d6efd, #0056b3);
+    color: white;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+}
+
+.option-btn:hover {
+    background: linear-gradient(135deg, #0056b3, #003d7a);
+    transform: translateY(-3px);
+}
+
+.option-btn::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 300%;
+    height: 300%;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    transition: all 0.5s;
+    z-index: 0;
+    transform: translate(-50%, -50%) scale(0);
+}
+
+.option-btn:hover::before {
+    transform: translate(-50%, -50%) scale(1);
+}
+
+input[type="text"] {
+    width: calc(100% - 90px);
+    padding: 12px;
+    border: none;
+    border-radius: 50px;
+    margin-right: 5px;
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+input[type="text"]:focus {
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.8);
+}
+
+button {
+    padding: 12px 18px;
+    border: none;
+    border-radius: 50px;
+    background: linear-gradient(135deg, #198754, #145a32);
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
+    position: relative;
+    overflow: hidden;
+}
+
+button:hover {
+    background: linear-gradient(135deg, #145a32, #198754);
+    transform: translateY(-3px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+button:active {
+    transform: translateY(1px);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Custom Scrollbar */
+#chat-box::-webkit-scrollbar {
+    width: 8px;
+}
+
+#chat-box::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+#chat-box::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.4);
+    border-radius: 10px;
+}
+
+#chat-box::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.7);
+}
+
+/* Add a smooth transition for all elements */
+* {
+    transition: all 0.3s ease-in-out;
+}
+
+/* Floating Action Button for Quick Actions */
+.fab {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, #ff4081, #f50057);
+    border-radius: 50%;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+    transition: transform 0.3s;
+}
+
+.fab:hover {
+    transform: scale(1.1);
+}
+
+/* Notification Badge */
+.notification-badge {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: red;
+    color: white;
+    border-radius: 50%;
+    padding: 5px 10px;
+    font-size: 12px;
+    font-weight: bold;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+}
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <h1>Flune - Your Health Chatbot</h1>
+        <div id="chat-box"></div>
+        <div class="options" id="options-container" style="display: none;">
+            <button class="option-btn" onclick="selectOption('fever')">Fever</button>
+            <button class="option-btn" onclick="selectOption('headache')">Headache</button>
+            <button class="option-btn" onclick="selectOption('malaria')">Malaria</button>
+            <button class="option-btn" onclick="selectOption('stomachpain')">Stomach Pain</button>
+            <button class="option-btn" onclick="selectOption('bodypain')">Body Pain</button>
+            <button class="option-btn" onclick="selectOption('heartpain')">Heart Pain</button>
+        </div>
+        <input type="text" id="user-input" placeholder="type hi to interact with flune health">
+        <button id="send-btn">Send</button>
+    </div>
+    <script>
+        const chatBox = document.getElementById('chat-box');
+        const userInput = document.getElementById('user-input');
+        const sendBtn = document.getElementById('send-btn');
+        const optionsContainer = document.getElementById('options-container');
+
+        const healthIssues = {
+            fever: {
+                advice: "For fever, you may consider taking paracetamol. If it persists, visit a nearby clinic.",
+                tablets: "Recommended tablets: Paracetamol (Crocin, Calpol).",
+                hospital: "Good hospitals: Apollo Hospital, Fortis Hospital, AIIMS (New Delhi).",
+                link: "https://maps.app.goo.gl/pwHYuKk2wrPcCKdS9",
+                food: "Eat foods rich in fluids like soups, broths, and drink plenty of water. Citrus fruits, bananas, and rice are good."
+            },
+            headache: {
+                advice: "For headaches, over-the-counter pain relief like ibuprofen can help. If severe, consult a doctor.",
+                tablets: "Recommended tablets: Ibuprofen (Brufen), Aspirin.",
+                hospital: "Good hospitals: Fortis Healthcare, Max Super Specialty Hospital.",
+                link: "https://maps.app.goo.gl/9dVVZQ4iCTfKUqqD7",
+                food: "Stay hydrated. Magnesium-rich foods like spinach, pumpkin seeds, and whole grains can help relieve headaches."
+            },
+            malaria: {
+                advice: "If you suspect malaria, please visit the nearest hospital for a blood test and treatment.",
+                tablets: "Recommended tablets: Artemisinin-based combination therapies (ACT).",
+                hospital: "Good hospitals: Apollo Hospital, Manipal Hospital.",
+                link: "https://maps.app.goo.gl/42q2sBSXo8zvzzo86",
+                food: "Consume fruits like oranges, papayas, and protein-rich foods such as eggs and lentils to boost recovery."
+            },
+            stomachpain: {
+                advice: "For stomach pain, you can try antacids. However, if it continues, seek medical attention.",
+                tablets: "Recommended tablets: Antacids (Digene, Gelusil).",
+                hospital: "Good hospitals: Fortis Hospital, Max Healthcare.",
+                link: "https://maps.app.goo.gl/UHzyNMHi4LLoycvb6",
+                food: "Eat easily digestible foods such as bananas, rice, applesauce, and toast (the BRAT diet)."
+            },
+            bodypain: {
+                advice: "For body pain, consider taking pain relievers. If it lasts, consult a healthcare provider.",
+                tablets: "Recommended tablets: Paracetamol, Diclofenac.",
+                hospital: "Good hospitals: Apollo Hospital, Manipal Hospital.",
+                link: "https://maps.app.goo.gl/VMXHr2e3Mwoyu5tE8",
+                food: "Consume foods with anti-inflammatory properties such as turmeric, ginger, and green leafy vegetables."
+            },
+            heartpain: {
+                advice: "Heart pain requires immediate medical attention. Please call emergency services or go to a hospital.",
+                tablets: "Recommended tablets: Nitroglycerin (as prescribed), Aspirin (in emergencies).",
+                hospital: "Good hospitals: AIIMS (New Delhi), Fortis Escorts Heart Institute.",
+                link: "https://maps.app.goo.gl/Ayg9T4SENG29P4Lu5",
+                food: "Eat heart-healthy foods like oats, berries, avocados, and fatty fish rich in omega-3 fatty acids."
+            }
+        };
+
+        function addMessageToChatBox(message, isUser) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${isUser ? 'user-message' : 'bot-message'}`;
+            messageDiv.textContent = message;
+            chatBox.appendChild(messageDiv);
+            chatBox.scrollTop = chatBox.scrollHeight; // Scroll to the bottom
+        }
+
+        function welcomeUser() {
+            addMessageToChatBox("Hi! Welcome to Flune. I'm here to help you with your health concerns.", false);
+            addMessageToChatBox("What health issue are you facing today?", false);
+            optionsContainer.style.display = 'block'; // Show options after greeting
+        }
+
+        function selectOption(option) {
+            addMessageToChatBox(`Selected: ${option.charAt(0).toUpperCase() + option.slice(1)}`, true);
+            const issue = healthIssues[option];
+            addMessageToChatBox(issue.advice, false);
+            addMessageToChatBox(issue.tablets, false);
+            addMessageToChatBox(issue.hospital, false);
+            addMessageToChatBox("Healthy Food Advice: " + issue.food, false);
+            
+            // If a link exists for the option, open it
+            if (issue.link) {
+                window.open(issue.link, "_blank");
+            }
+        }
+
+        function handleUserInput() {
+            const input = userInput.value.toLowerCase().trim();
+            addMessageToChatBox(input, true);
+            userInput.value = '';
+
+            if (input === "hi" || input === "hello") {
+                welcomeUser();
+            } else if (healthIssues[input]) {
+                const issue = healthIssues[input];
+                addMessageToChatBox(issue.advice, false);
+                addMessageToChatBox(issue.tablets, false);
+                addMessageToChatBox(issue.hospital, false);
+                addMessageToChatBox("Healthy Food Advice: " + issue.food, false);
+
+                // If a link exists for the user input, open it
+                if (issue.link) {
+                    window.open(issue.link, "_blank");
+                }
+            } else {
+                addMessageToChatBox("Sorry, I didn't understand that. Please type 'hi' to start or choose an option.", false);
+            }
+        }
+
+        sendBtn.addEventListener('click', handleUserInput);
+        userInput.addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                handleUserInput();
+            }
+        });
+    </script>
+</body>
+</html>

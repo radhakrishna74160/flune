@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Chatbot - AI Powered Bot</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Your existing styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #fff;
+            background-color: #1a1a1a;
+            padding-top: 60px;
+        }
+
+        header {
+            background: #333;
+            color: #fff;
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+        }
+
+        nav .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        nav h1 {
+            font-size: 1.75rem;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+        }
+
+        nav ul li {
+            margin-left: 1.5rem;
+        }
+
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 1rem;
+            transition: color 0.3s ease;
+        }
+
+        nav ul li a:hover {
+            color: #ffd700;
+        }
+
+        .hero {
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('chatbot-background.jpg') no-repeat center center/cover;
+            color: #fff;
+            text-align: center;
+            padding: 6rem 1rem;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.3);
+            z-index: 1;
+        }
+
+        .hero h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            z-index: 2;
+            position: relative;
+            animation: fadeInDown 1s ease-out;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            margin-bottom: 2rem;
+            font-weight: 300;
+            z-index: 2;
+            position: relative;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .chatbot-content {
+            padding: 4rem 1rem;
+            background-color: #2b2b2b;
+            text-align: center;
+        }
+
+        .chatbot-content h3 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+            color: #ffd700;
+        }
+
+        .chatbot-content p {
+            font-size: 1rem;
+            color: #ccc;
+            margin-bottom: 2rem;
+        }
+
+        .chatbot-interface {
+            border: 1px solid #444;
+            border-radius: 8px;
+            padding: 2rem;
+            background: #1e1e1e;
+            max-width: 600px;
+            margin: 0 auto;
+            position: relative;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+        }
+
+        textarea {
+            width: 100%;
+            height: 150px;
+            padding: 1rem;
+            border: 1px solid #444;
+            border-radius: 4px;
+            font-family: 'Fira Code', monospace;
+            font-size: 1rem;
+            line-height: 1.5;
+            background: #2e2e2e;
+            color: #fff;
+            resize: vertical;
+        }
+
+        .chatbot-button {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            margin-top: 1rem;
+            border: none;
+            border-radius: 4px;
+            background-color: #ff6f61;
+            color: #fff;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s ease;
+        }
+
+        .chatbot-button:hover {
+            background-color: #ff3b2d;
+        }
+
+        footer {
+            background: #333;
+            color: #fff;
+            text-align: center;
+            padding: 1rem 0;
+            margin-top: 4rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+
+        .social-icons {
+            margin-top: 1rem;
+        }
+
+        .social-icons a {
+            color: #fff;
+            margin: 0 0.5rem;
+            font-size: 1.2rem;
+            transition: color 0.3s ease;
+        }
+
+        .social-icons a:hover {
+            color: #ffd700;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .hero h2 {
+                font-size: 2rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            .chatbot-interface {
+                padding: 1rem;
+            }
+
+            textarea {
+                height: 100px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="container">
+                <h1>AI Powered Bot</h1>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="services.html">Services</a></li>
+                    <li><a href="#">About</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <h2>AI Chatbot</h2>
+            <p>Engage with our advanced AI chatbot for a variety of tasks and queries. Experience seamless and intelligent conversations.</p>
+        </div>
+    </section>
+
+    <section class="chatbot-content">
+        <div class="container">
+            <h3>Chat with Our AI</h3>
+            <p>Type your message below to start interacting with our AI chatbot. It’s designed to assist you with a wide range of questions and tasks.</p>
+            <div class="chatbot-interface">
+                <textarea id="chatbot-input" class="chatbot-input" placeholder="Type your message here..."></textarea>
+                <button id="chatbot-button" class="chatbot-button">Send</button>
+                <div id="chatbot-output"></div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 AI Powered Bot. All rights reserved.</p>
+            <div class="social-icons">
+                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Simple chatbot conversation logic
+        document.getElementById('chatbot-button').addEventListener('click', function() {
+            var input = document.getElementById('chatbot-input').value.toLowerCase();
+            var output = document.getElementById('chatbot-output');
+            var response = '';
+
+            // Simple chatbot responses based on keywords
+            if (input.includes('hello') || input.includes('hi')) {
+                response = 'Hello! How can I assist you today?';
+            } else if (input.includes('quiz')) {
+                response = 'Starting the quiz...';
+                window.location.href = 'quiz.html';  // Navigate to the quiz page
+            } else if (input.includes('future messages')) {
+                response = 'Opening Future Messages...';
+                window.location.href = 'hi.html';  // Navigate to the future messages page
+            } else if (input.includes('interact with ai')) {
+                response = 'Opening AI interactions...';
+                window.location.href = 'ai.html';  // Navigate to the AI interaction page
+            } else if (input.includes('help')) {
+                response = 'Sure, I can help! You can interact with me, play a quiz, or schedule future messages.';
+            } else {
+                response = 'Sorry, I did not understand that. Please try again or click one of the options.';
+            }
+
+            // Display the chatbot response
+            output.innerHTML = `<p>${response}</p>`;
+            document.getElementById('chatbot-input').value = ''; // Clear the input field
+        });
+    </script>
+</body>
+</html>

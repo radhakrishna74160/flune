@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Upload Image</title>
+<style>
+body {
+  font-family: Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-color: #f0f0f0;
+  margin: 0;
+}
+
+h1 {
+  color: #333;
+}
+
+.container {
+  text-align: center;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  max-width: 400px;
+  width: 100%;
+}
+
+.preview {
+  margin-top: 20px;
+}
+
+.preview img {
+  max-width: 100%;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+input[type="file"] {
+  margin-top: 10px;
+}
+</style>
+</head>
+<body>
+  <div class="container">
+    <h1>Upload Your Image</h1>
+    <input type="file" id="imageInput" accept="image/*">
+    <div class="preview" id="imagePreview"></div>
+  </div>
+
+<script>
+const imageInput = document.getElementById('imageInput');
+const imagePreview = document.getElementById('imagePreview');
+
+// Handle image upload and preview
+imageInput.addEventListener('change', () => {
+  const file = imageInput.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = () => {
+      const uploadedImage = reader.result;
+      imagePreview.innerHTML = `<img src="${uploadedImage}" alt="Uploaded Image">`;
+    };
+    reader.readAsDataURL(file);
+  }
+});
+</script>
+</body>
+</html>

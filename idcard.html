@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ID Card Generator</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #e0e6ed;
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+
+        form {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            width: 400px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+        }
+
+        input[type="text"], input[type="file"] {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        input[type="text"]:focus, input[type="file"]:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+        }
+
+        input[type="submit"], #downloadBtn {
+            background-color: #007bff;
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+            font-weight: bold;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        input[type="submit"]:hover, #downloadBtn:hover {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+        }
+
+        #idCard {
+            display: none;
+            border: none;
+            padding: 20px;
+            margin-top: 20px;
+            border-radius: 12px;
+            background-color: #ffffff;
+            position: relative;
+            max-width: 320px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            animation: fadeIn 0.5s ease;
+        }
+
+        #idCard img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%; /* Circular shape for a modern look */
+            border: 2px solid #007bff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        #collegeName {
+            font-weight: bold;
+            font-size: 1.4em;
+            color: #007bff;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        #downloadBtn {
+            display: none;
+            margin-top: 20px;
+        }
+
+        /* Fade-in animation */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div>
+        <h2>ID Card Generator</h2>
+        <form id="idCardForm">
+            <label for="collegeNameInput">College Name:</label>
+            <input type="text" id="collegeNameInput" name="collegeName" required>
+
+            <label for="fullName">Full Name:</label>
+            <input type="text" id="fullName" name="fullName" required>
+
+            <label for="fatherName">Father's Name:</label>
+            <input type="text" id="fatherName" name="fatherName" required>
+
+            <label for="study">Study:</label>
+            <input type="text" id="study" name="study" required>
+
+            <label for="rollNumber">Roll Number:</label>
+            <input type="text" id="rollNumber" name="rollNumber" required>
+
+            <label for="address">Address:</label>
+            <input type="text" id="address" name="address" required>
+
+            <label for="bloodGroup">Blood Group:</label>
+            <input type="text" id="bloodGroup" name="bloodGroup" required>
+
+            <label for="passPhoto">Upload Passport Photo:</label>
+            <input type="file" id="passPhoto" name="passPhoto" accept="image/*" required>
+
+            <input type="submit" value="Generate ID Card">
+        </form>
+
+        <div id="idCard">
+            <h3>ID Card</h3>
+            <div id="collegeName"></div>
+            <img id="photoPreview" src="" alt="Passport Photo">
+            <p><strong>Full Name:</strong> <span id="displayFullName"></span></p>
+            <p><strong>Father's Name:</strong> <span id="displayFatherName"></span></p>
+            <p><strong>Study:</strong> <span id="displayStudy"></span></p>
+            <p><strong>Roll Number:</strong> <span id="displayRollNumber"></span></p>
+            <p><strong>Address:</strong> <span id="displayAddress"></span></p>
+            <p><strong>Blood Group:</strong> <span id="displayBloodGroup"></span></p>
+        </div>
+
+        <button id="downloadBtn">Download ID Card</button>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script>
+        document.getElementById('idCardForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            // Get form values
+            const collegeName = document.getElementById('collegeNameInput').value;
+            const fullName = document.getElementById('fullName').value;
+            const fatherName = document.getElementById('fatherName').value;
+            const study = document.getElementById('study').value;
+            const rollNumber = document.getElementById('rollNumber').value;
+            const address = document.getElementById('address').value;
+            const bloodGroup = document.getElementById('bloodGroup').value;
+            const passPhoto = document.getElementById('passPhoto').files[0];
+
+            // Display ID Card
+            document.getElementById('collegeName').textContent = collegeName;
+            document.getElementById('displayFullName').textContent = fullName;
+            document.getElementById('displayFatherName').textContent = fatherName;
+            document.getElementById('displayStudy').textContent = study;
+            document.getElementById('displayRollNumber').textContent = rollNumber;
+            document.getElementById('displayAddress').textContent = address;
+            document.getElementById('displayBloodGroup').textContent = bloodGroup;
+
+            // Preview photo
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('photoPreview').src = e.target.result;
+            };
+            reader.readAsDataURL(passPhoto);
+
+            // Show the ID card and download button
+            document.getElementById('idCard').style.display = 'block';
+            document.getElementById('downloadBtn').style.display = 'block';
+        });
+
+        document.getElementById('downloadBtn').addEventListener('click', function() {
+            html2canvas(document.querySelector("#idCard")).then(canvas => {
+                const link = document.createElement('a');
+                link.download = 'id_card.png';
+                link.href = canvas.toDataURL();
+                link.click();
+            });
+        });
+    </script>
+
+</body>
+</html>

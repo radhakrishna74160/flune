@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Frustrated Calculator with Surprises</title>
+<style>
+/* Reset basic styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Fire-themed background */
+body {
+  font-family: 'Arial', sans-serif;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #000;
+  background-image: url('https://i.imgur.com/GN7TRPb.png');
+  background-size: cover;
+  background-position: center;
+  color: white;
+  text-align: center;
+}
+
+/* Calculator container with fire border */
+.calculator {
+  width: 420px;
+  background-color: #333;
+  padding: 20px;
+  border-radius: 30px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+  position: relative;
+  border: 5px solid #ff4500;
+}
+
+/* Calculator screen */
+.screen {
+  width: 100%;
+  height: 80px;
+  background-color: #222;
+  color: #ff4500;
+  font-size: 2.5em;
+  text-align: right;
+  padding: 10px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  border: 3px solid #ff4500;
+}
+
+/* Calculator button styles */
+.button {
+  width: 80px;
+  height: 80px;
+  margin: 5px;
+  font-size: 1.5em;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out;
+  background-color: #ff4500;
+  color: white;
+}
+
+/* Function, operator, and equals buttons */
+.button.function {
+  background-color: #ff6347;
+}
+
+.button.operator {
+  background-color: #d32f2f;
+}
+
+.button.equals {
+  background-color: #ff4500;
+}
+
+/* Number buttons */
+.button.number {
+  background-color: #444;
+  color: #ff4500;
+}
+
+/* Calculator grid layout */
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-gap: 10px;
+}
+
+/* Media queries for responsive layout */
+@media (max-width: 500px) {
+  .calculator {
+    width: 300px;
+  }
+
+  .button {
+    width: 60px;
+    height: 60px;
+    font-size: 1.2em;
+  }
+
+  .screen {
+    height: 60px;
+    font-size: 2em;
+  }
+}
+</style>
+</head>
+<body>
+
+<!-- Prompt above calculator -->
+<h1>Try these surprises: 8 + 8 =, 5 * 5 =</h1>
+
+<!-- Calculator body -->
+<div class="calculator">
+  <div class="screen" id="screen">0</div>
+  <div class="grid-container">
+    <!-- Function keys -->
+    <button class="button function" onclick="clearScreen()">C</button>
+    <button class="button function" onclick="backspace()">←</button>
+    <button class="button operator" onclick="appendOperator('/')">÷</button>
+    <button class="button operator" onclick="appendOperator('*')">×</button>
+
+    <!-- Number keys -->
+    <button class="button number" onclick="appendNumber(7)">7</button>
+    <button class="button number" onclick="appendNumber(8)">8</button>
+    <button class="button number" onclick="appendNumber(9)">9</button>
+    <button class="button operator" onclick="appendOperator('-')">-</button>
+
+    <button class="button number" onclick="appendNumber(4)">4</button>
+    <button class="button number" onclick="appendNumber(5)">5</button>
+    <button class="button number" onclick="appendNumber(6)">6</button>
+    <button class="button operator" onclick="appendOperator('+')">+</button>
+
+    <button class="button number" onclick="appendNumber(1)">1</button>
+    <button class="button number" onclick="appendNumber(2)">2</button>
+    <button class="button number" onclick="appendNumber(3)">3</button>
+    <button class="button equals" style="grid-row: span 2;" onclick="calculate()">=</button>
+
+    <button class="button number" onclick="appendNumber(0)" style="grid-column: span 2">0</button>
+    <button class="button number" onclick="appendNumber('.')">.</button>
+  </div>
+</div>
+
+<script>
+let screen = document.getElementById('screen');
+let currentInput = '';
+
+function appendNumber(number) {
+  currentInput += number;
+  screen.innerText = currentInput;
+}
+
+function appendOperator(operator) {
+  currentInput += ' ' + operator + ' ';
+  screen.innerText = currentInput;
+}
+
+function clearScreen() {
+  currentInput = '';
+  screen.innerText = '0';
+}
+
+function backspace() {
+  currentInput = currentInput.trim().split(' ').slice(0, -1).join(' ');
+  screen.innerText = currentInput || '0';
+}
+
+function calculate() {
+  try {
+    if (currentInput === '5 * 5') {
+      window.location.href = 'scal.html';
+    } else if (currentInput === '8 + 8') {
+      window.location.href = 'saveimage.html';
+    } else {
+      currentInput = eval(currentInput).toString();
+      screen.innerText = currentInput;
+    }
+  } catch (error) {
+    screen.innerText = 'Error';
+    currentInput = '';
+  }
+}
+</script>
+
+</body>
+</html>

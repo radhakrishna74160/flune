@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Services - FLUNE MULTI SERVICES PLATFORM</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* General Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(180deg, #141e30, #243b55);
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        header {
+            background: linear-gradient(90deg, #fc466b, #3f5efb);
+            color: #fff;
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        nav .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        nav h1 {
+            font-size: 2rem;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+        }
+
+        nav ul li {
+            margin-left: 1.5rem;
+        }
+
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 1.1rem;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        nav ul li a:hover {
+            color: #ffd700;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #ff512f, #dd2476);
+            color: #fff;
+            text-align: center;
+            padding: 8rem 1rem 5rem;
+            clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+            animation: gradientMove 5s infinite alternate-reverse;
+        }
+
+        .hero h2 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .hero p {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .service-section {
+            padding: 4rem 1rem;
+            margin: 2rem 0;
+        }
+
+        .service-section h2 {
+            text-align: center;
+            margin-bottom: 2rem;
+            font-size: 2.8rem;
+            color: #ffd700;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .service-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            padding: 0 2rem;
+        }
+
+        .service {
+            position: relative;
+            padding: 2rem;
+            border-radius: 16px;
+            background: linear-gradient(135deg, #1e90ff, #ff7e5f);
+            text-align: center;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+            color: #fff;
+        }
+
+        .service:hover {
+            transform: scale(1.1) rotate(-2deg);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .service i {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            color: #ffd700;
+        }
+
+        .service h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .service p {
+            font-size: 1.1rem;
+            color: #fff;
+            line-height: 1.5;
+        }
+
+        footer {
+            background: linear-gradient(90deg, #6a11cb, #2575fc);
+            color: #fff;
+            text-align: center;
+            padding: 1.5rem 0;
+            margin-top: 4rem;
+            font-size: 0.9rem;
+            box-shadow: 0 -5px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Animations */
+        @keyframes gradientMove {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 100% 50%; }
+        }
+
+        @media (max-width: 768px) {
+            .hero h2 {
+                font-size: 2rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            .service-container {
+                padding: 0 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="container">
+                <h1>FLUNE MULTI SERVICES PLATFORM</h1>
+                <ul>
+                    <li><a href="homepage.html">Home</a></li>
+                    <li><a href="services.html">Services</a></li>
+                    <li><a href="#">about</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <h2>Our Services</h2>
+            <p>Empowering your experience with cutting-edge AI technology.</p>
+        </div>
+    </section>
+
+    <section class="service-section">
+        <div class="container">
+            <h2>What We Offer</h2>
+            <div class="service-container">
+                <a href="chatbot.html" class="service">
+                    <i class="fas fa-robot"></i>
+                    <h3>AI Chatbot</h3>
+                    <p>Seamlessly interact with our intelligent chatbot for enhanced productivity.</p>
+                </a>
+                <a href="code-editor.html" class="service">
+                    <i class="fas fa-code"></i>
+                    <h3>Code Editor</h3>
+                    <p>Write, test, and debug efficiently with our online code editor.</p>
+                </a>
+                <a href="health.html" class="service">
+                    <i class="fas fa-heartbeat"></i>
+                    <h3>Flune Health Care</h3>
+                    <p>Your journey to better health starts here with Flune Health Care.</p>
+                </a>
+                <a href="editor.html" class="service">
+                    <i class="fas fa-pencil-alt"></i>
+                    <h3>Flune AI Editor</h3>
+                    <p>Create and refine content effortlessly with AI-powered tools.</p>
+                </a>
+                <a href="idcard.html" class="service">
+                    <i class="fas fa-id-card"></i>
+                    <h3>Flune ID</h3>
+                    <p>Easily generate personalized ID cards using our advanced tool.</p>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 FLUNE MULTI SERVICES PLATFORM. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>

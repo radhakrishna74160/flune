@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Image Upload and View</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f0f0f0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      height: 100vh;
+    }
+
+    .container {
+      background-color: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+
+    input[type="file"] {
+      margin-bottom: 20px;
+    }
+
+    .images-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px; /* Increased gap for spacing */
+    }
+
+    .image-box {
+      position: relative;
+    }
+
+    .image-box img {
+      max-width: 300px; /* Increased width */
+      max-height: 300px; /* Increased height */
+      object-fit: cover;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .delete-btn {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      background: red;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+
+    #savedImagesContainer {
+      display: none; /* Initially hidden */
+    }
+
+    .toggle-btn {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 20px;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h2>Choose and Save Your Images</h2>
+    <input type="file" id="imageInput" accept="image/*" multiple>
+    <button onclick="saveImages()">Save Images</button>
+    <button class="toggle-btn" id="toggleImagesBtn" onclick="toggleSavedImages()">Open Saved Images</button>
+
+    <h3>Saved Images</h3>
+    <div id="savedImagesContainer" class="images-container"></div>
+  </div>
+
+  <script>
+    const imageInput = document.getElementById('imageInput');
+    const savedImagesContainer = document.getElementById('savedImagesContainer');
+    const toggleImagesBtn = document.getElementById('toggleImagesBtn');
+
+    // Load saved images from local storage on page load
+    window.onload = function() {
+      displaySavedImages();
+    };
+
+    // Function to save selected images to local storage
+    function saveImages() {
+      const files = imageInput.files;
+      const savedImages = JSON.parse(localStorage.getItem('savedImages')) || [];
+
+      for (let i = 0; i < files.length; i++) {
+        const reader = new FileReader();
+
+        reader.onload = function(event) {
+          savedImages.push(event.target.result);  // Save image as base64 string
+          localStorage.setItem('savedImages', JSON.stringify(savedImages));
+          displaySavedImages();
+        };
+
+        reader.readAsDataURL(files[i]);
+      }
+    }
+
+    // Function to display saved images from local storage
+    function displaySavedImages() {
+      const savedImages = JSON.parse(localStorage.getItem('savedImages')) || [];
+      savedImagesContainer.innerHTML = '';  // Clear the container
+
+      savedImages.forEach((image, index) => {
+        const imageBox = document.createElement('div');
+        imageBox.classList.add('image-box');
+        
+        const imgElement = document.createElement('img');
+        imgElement.src = image;
+
+        const deleteBtn = document.createElement('button');
+        deleteBtn.innerText = 'X';
+        deleteBtn.classList.add('delete-btn');
+        deleteBtn.onclick = function() {
+          deleteImage(index);
+        };
+
+        imageBox.appendChild(imgElement);
+        imageBox.appendChild(deleteBtn);
+        savedImagesContainer.appendChild(imageBox);
+      });
+    }
+
+    // Function to delete an image from local storage
+    function deleteImage(index) {
+      let savedImages = JSON.parse(localStorage.getItem('savedImages'));
+      savedImages.splice(index, 1);  // Remove the image at the specified index
+      localStorage.setItem('savedImages', JSON.stringify(savedImages));
+      displaySavedImages();  // Update the display
+    }
+
+    // Function to toggle saved images display
+    function toggleSavedImages() {
+      if (savedImagesContainer.style.display === 'none') {
+        savedImagesContainer.style.display = 'flex';  // Show saved images
+        toggleImagesBtn.innerText = 'Hide Saved Images';
+      } else {
+        savedImagesContainer.style.display = 'none';  // Hide saved images
+        toggleImagesBtn.innerText = 'Open Saved Images';
+      }
+    }
+  </script>
+
+</body>
+</html>
